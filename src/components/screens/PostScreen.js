@@ -48,7 +48,7 @@ class PostScreen extends Component {
     };
 
     render() {
-        const {classes, post, needsToLoad} = this.props;
+        const {classes, post, needsToLoad, commentsCount} = this.props;
         return (
             <React.Fragment>
                 {empty(post) && !needsToLoad && <Redirect to='/notFound'/>}
@@ -94,7 +94,7 @@ class PostScreen extends Component {
                                 />
                             </Grid>
                             <Grid item>
-                                    <CommentCount count={post.commentCount}/>
+                                <CommentCount count={commentsCount}/>
                             </Grid>
                         </Grid>
                     </CardActions>
@@ -117,7 +117,7 @@ class PostScreen extends Component {
     }
 }
 
-const mapStateToProps = ({posts, options, user}, ownProps) => {
+const mapStateToProps = ({posts, options, user, comments}, ownProps) => {
     let post = {};
     if (empty(posts)) {//need to load the posts
         return {
@@ -138,6 +138,7 @@ const mapStateToProps = ({posts, options, user}, ownProps) => {
     return {
         post: post,
         categories: options.categories,
+        commentsCount: empty(comments.all)? 0 : comments.all.length
     }
 };
 
@@ -146,6 +147,7 @@ PostScreen.propTypes = {
     needsToLoad: PropTypes.bool,
     post: PropTypes.object,
     categories: PropTypes.array,
+    commentsCount: PropTypes.number.isRequired,
     fetchPosts: PropTypes.func.isRequired,
     addPost: PropTypes.func.isRequired,
     editPost: PropTypes.func.isRequired,
