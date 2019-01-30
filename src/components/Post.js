@@ -9,21 +9,18 @@ import CardHeader from "@material-ui/core/CardHeader";
 import Avatar from "@material-ui/core/Avatar";
 import IconButton from "@material-ui/core/IconButton";
 import OpenIcon from "@material-ui/icons/OpenInNew";
-import UpVoteIcon from "@material-ui/icons/ThumbUp";
-import DownVoteIcon from "@material-ui/icons/ThumbDown";
-import CommentIcon from "@material-ui/icons/Comment";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import CardContent from "@material-ui/core/CardContent";
 import CardActions from "@material-ui/core/es/CardActions/CardActions";
-import Badge from "@material-ui/core/es/Badge/Badge";
 import Divider from "@material-ui/core/Divider";
-import {valueInRange} from "../utils/helpers";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
-import {Link,withRouter} from "react-router-dom";
+import {Link, withRouter} from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
 import {deletePost, downVotePost, upVotePost} from "../actions/posts";
 import {connect} from "react-redux";
+import Vote from "./Vote";
+import CommentCount from "./CommentCount";
 
 class Post extends Component {
     state = {
@@ -52,8 +49,8 @@ class Post extends Component {
     };
 
     render() {
-        const { post,classes } = this.props;
-        const { anchorEl } = this.state;
+        const {post, classes} = this.props;
+        const {anchorEl} = this.state;
         return (
             <Card className={classes.margin} elevation={1}>
                 <CardHeader
@@ -65,7 +62,7 @@ class Post extends Component {
                     }
                     title={post.title}
                     subheader={`${post.author} (${moment(post.timestamp).fromNow()})`}
-                    titleTypographyProps={{variant: "h5",className: classes.oneLineeText}}
+                    titleTypographyProps={{variant: "h5", className: classes.oneLineeText}}
                     action={
                         <IconButton onClick={this.handleClick}>
                             <MoreVertIcon/>
@@ -81,26 +78,18 @@ class Post extends Component {
                 <CardActions>
                     <Grid container justify="space-between">
                         <Grid item>
-                            <IconButton aria-label="UP Vote" onClick={() => this.upVote(post.id)}>
-                                <UpVoteIcon/>
-                            </IconButton>
-                            <Badge className={classes.margin} color="secondary" badgeContent={valueInRange(post.voteScore)}>
-                                <div/>
-                            </Badge>
-                            <IconButton aria-label="DOWN Vote" onClick={() => this.downVote(post.id)}>
-                                <DownVoteIcon/>
-                            </IconButton>
+                            <Vote
+                                upVoteAction={() => this.upVote(post.id)}
+                                downVoteAction={() => this.downVote(post.id)}
+                                voteScore={post.voteScore}
+                            />
                         </Grid>
                         <Grid item>
-                            <Link to={post.category+'/'+post.id} >
-                                <IconButton aria-label="Comments">
-                                    <Badge color="secondary" badgeContent={post.commentCount}>
-                                        <CommentIcon/>
-                                    </Badge>
-                                </IconButton>
+                            <Link to={post.category + '/' + post.id}>
+                                <CommentCount count={post.commentCount}/>
                             </Link>
 
-                            <Link to={post.category+'/'+post.id} >
+                            <Link to={post.category + '/' + post.id}>
                                 <IconButton aria-label="Open">
                                     <OpenIcon/>
                                 </IconButton>
@@ -132,4 +121,4 @@ Post.propTypes = {
     post: PropTypes.object.isRequired,
 };
 
-export default withRouter(connect(null,{upVotePost, downVotePost, deletePost})(withStyles(styles)(Post)))
+export default withRouter(connect(null, {upVotePost, downVotePost, deletePost})(withStyles(styles)(Post)))

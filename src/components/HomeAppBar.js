@@ -15,9 +15,7 @@ import {searchChanged} from "../actions/options";
 
 
 class HomeAppBar extends React.Component {
-    searchChanged = event => {
-        this.props.dispatch(searchChanged(event.target.value))
-    };
+    searchChanged = event => this.props.searchChanged(event.target.value);
 
     render() {
         const {classes, search} = this.props;
@@ -73,5 +71,5 @@ function mapStateToProps({search}) {
     }
 }
 
-export default connect(mapStateToProps)(withStyles(styles)(HomeAppBar))
+export default connect(mapStateToProps, {searchChanged})(withStyles(styles)(HomeAppBar))
 

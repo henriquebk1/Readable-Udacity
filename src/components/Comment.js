@@ -9,18 +9,15 @@ import CardHeader from "@material-ui/core/CardHeader";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
-import UpVoteIcon from "@material-ui/icons/ThumbUp";
-import DownVoteIcon from "@material-ui/icons/ThumbDown";
 import CardContent from "@material-ui/core/CardContent";
 import CardActions from "@material-ui/core/es/CardActions/CardActions";
-import Badge from "@material-ui/core/es/Badge/Badge";
 import Divider from "@material-ui/core/Divider";
-import {valueInRange} from "../utils/helpers";
 import {withRouter} from "react-router-dom";
 import Grid from "@material-ui/core/Grid";
 import {deleteComment, downVoteComment, upVoteComment} from "../actions/comments";
 import {connect} from "react-redux";
 import NewComment from "./NewComment";
+import Vote from "./Vote";
 
 class Post extends Component {
     state = {
@@ -55,16 +52,11 @@ class Post extends Component {
                 <CardActions>
                     <Grid container justify="space-between">
                         <Grid item>
-                            <IconButton aria-label="UP Vote" onClick={() => this.upVote(comment.id)}>
-                                <UpVoteIcon/>
-                            </IconButton>
-                            <Badge className={classes.margin} color="secondary"
-                                   badgeContent={valueInRange(comment.voteScore)}>
-                                <div/>
-                            </Badge>
-                            <IconButton aria-label="DOWN Vote" onClick={() => this.downVote(comment.id)}>
-                                <DownVoteIcon/>
-                            </IconButton>
+                            <Vote
+                                upVoteAction={() => this.upVote(comment.id)}
+                                downVoteAction={() => this.downVote(comment.id)}
+                                voteScore={comment.voteScore}
+                            />
                         </Grid>
                         <Grid item>
                             <IconButton aria-label="Delete" onClick={() => this.delete(comment.id)}>
